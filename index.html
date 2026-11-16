@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#CF2638">
+<title>学校祭 あそび記録帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* 紅白幕のストライプを頭に、1カラムの作業画面。スマホは下タブ、PCは上タブ。 */
+:root{
+  --bg:#F3F4F7; --surface:#FFFFFF; --surface-2:#F7F8FB; --ink:#1B1F2A; --muted:#5B6274; --line:#DDE1E9;
+  --beni:#CF2638; --beni-ink:#FFFFFF; --beni-soft:#FBE6E8; --stripe-w:#FFFFFF;
+  --g-sumo:#B5651D; --g-eawase:#2D6CDF; --g-kendama:#178A5B; --g-fuku:#B83A9E;
+  --ok:#178A5B; --warn:#B86E00; --crit:#CF2638;
+  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#121419; --surface:#1B1E26; --surface-2:#22262F; --ink:#ECEEF3; --muted:#9CA3B4; --line:#2E333F;
+  --beni:#EE4A5A; --beni-ink:#FFFFFF; --beni-soft:#3A1D23; --stripe-w:#E8E6E3;
+  --g-sumo:#C98038; --g-eawase:#5B8CEB; --g-kendama:#2FAE78; --g-fuku:#C95FB6;
+  --ok:#3FC28A; --warn:#E3A23A; --crit:#EE4A5A; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;font-variant-numeric:tabular-nums;padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--beni);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.maku{height:10px;background:repeating-linear-gradient(90deg,var(--beni) 0 26px,var(--stripe-w) 26px 52px)}
+.top-in{max-width:980px;margin:0 auto;padding-block:10px;display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:20px;letter-spacing:.02em;line-height:1.2}
+.brand small{display:block;font-family:var(--f-body);font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.08em}
+.conn{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.conn[data-s="live"] .dot{background:var(--ok)}
+.conn[data-s="local"] .dot{background:var(--warn)}
+.conn[data-s="err"] .dot{background:var(--crit)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tabs{display:flex;gap:2px;max-width:980px;margin:0 auto}
+.tab{border:0;background:none;padding:10px 12px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--beni)}
+.badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--crit);color:var(--beni-ink);font-size:11px;line-height:18px;text-align:center}
+
+main{max-width:980px;margin:0 auto;padding-block:18px 40px}
+.view{display:grid;gap:16px}
+.banner{padding:10px 14px;border-radius:var(--r);background:var(--beni-soft);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:14px;min-width:0}
+.card h2{font-family:var(--f-display);font-weight:400;font-size:18px}
+.vh{font-family:var(--f-display);font-weight:400;font-size:20px}
+.label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.field{display:grid;gap:6px;min-width:0}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.row>.field{flex:1 1 160px}
+.push{margin-left:auto}
+input[type=text],input[type=number],input[type=date],input[type=time],input[type=search],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);min-height:44px}
+textarea{resize:vertical;min-height:70px}
+.hint{font-size:12px;color:var(--muted);margin:0}
+
+.games{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gbtn{border:2px solid var(--line);background:var(--surface);border-radius:var(--r);padding:12px 8px;display:grid;gap:2px;justify-items:center;font-weight:700;font-size:14px;text-align:center}
+.gbtn i{display:block;width:26px;height:6px;border-radius:3px;background:var(--gc)}
+.gbtn[aria-pressed="true"]{border-color:var(--gc);background:color-mix(in srgb,var(--gc) 12%,var(--surface))}
+.gbtn small{font-weight:500;color:var(--muted);font-size:11px}
+@media (max-width:520px){.games{grid-template-columns:repeat(2,1fr)}}
+.gpanel{display:grid;gap:14px}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 13px;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip b{font-weight:700;font-size:11px;opacity:.7;margin-left:4px}
+.side{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sidebtn{border:2px solid var(--line);background:var(--surface-2);border-radius:var(--r);padding:12px;font-weight:700}
+.sidebtn[aria-pressed="true"]{border-color:var(--g-sumo);background:color-mix(in srgb,var(--g-sumo) 14%,var(--surface))}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper button{width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);font-size:20px;font-weight:700;flex:none}
+.stepper input{width:96px;text-align:center;font-size:18px;font-weight:700}
+.stars{display:flex;gap:4px}
+.star{width:44px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);font-size:22px;line-height:1;color:var(--muted)}
+.star[aria-pressed="true"]{color:var(--warn);border-color:var(--warn)}
+.watch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:8px;background:var(--surface-2);border:1px dashed var(--line)}
+.watch output{font-size:26px;font-weight:700;min-width:88px}
+.btn{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:9px 14px;font-weight:700;min-height:40px}
+.btn.primary{background:var(--beni);border-color:var(--beni);color:var(--beni-ink)}
+.btn.big{padding:14px;font-size:17px;width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.danger{color:var(--crit)}
+.btn.sm{padding:4px 10px;font-size:12px;min-height:32px}
+
+.list{display:grid;margin:0;padding:0;list-style:none}
+.list>li{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);min-width:0;flex-wrap:wrap}
+.list>li:first-child{border-top:0}
+.gtag{flex:none;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;color:var(--gc);background:color-mix(in srgb,var(--gc) 13%,transparent);white-space:nowrap}
+.grow{flex:1 1 180px;min-width:0;overflow-wrap:anywhere}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.meta{font-size:12px;color:var(--muted)}
+.empty{padding:22px 10px;text-align:center;color:var(--muted);font-size:14px;display:block}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap;background:var(--surface)}
+.seg button{border:0;background:var(--surface);padding:7px 12px;font-weight:700;font-size:13px;color:var(--muted);min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button small{font-weight:500;font-size:11px;margin-left:4px;opacity:.8}
+.tblwrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right}
+.rank{font-family:var(--f-display);font-size:16px;width:44px}
+.banzuke{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;border:1px solid var(--g-sumo);color:var(--g-sumo);white-space:nowrap}
+.banzuke.yoko{background:var(--g-sumo);color:var(--surface)}
+.podium td{font-weight:700}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.kpi .v{font-family:var(--f-display);font-size:28px;line-height:1.2}
+.kpi .v small{font-family:var(--f-body);font-size:13px;color:var(--muted);margin-left:2px}
+.hbars{display:grid;gap:8px}
+.hbar{display:grid;grid-template-columns:96px 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.hbar .track{height:18px}
+.hbar .fill{height:100%;border-radius:0 4px 4px 0;background:var(--gc);min-width:2px}
+.hbar .n{text-align:right;font-weight:700}
+.vchart{display:flex;align-items:flex-end;gap:2px;height:150px;border-bottom:1px solid var(--line)}
+.vcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
+.vcol .bar{width:min(70%,34px);background:var(--beni);border-radius:4px 4px 0 0}
+.vcol .c{font-size:11px;font-weight:700;margin-bottom:2px}
+.vlabels{display:flex;gap:2px}
+.vlabels span{flex:1;text-align:center;font-size:11px;color:var(--muted);min-width:0}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;color:var(--muted);background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.pill.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.pill.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 16%,transparent)}
+.pill.crit{color:var(--crit);background:color-mix(in srgb,var(--crit) 14%,transparent)}
+
+/* 受付 */
+.callboard{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+@media (max-width:640px){.callboard{grid-template-columns:1fr}}
+.nowcall{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.nowcall .num{font-family:var(--f-display);font-size:40px;line-height:1.1;color:var(--crit)}
+.nowcall .num small{font-family:var(--f-body);font-size:14px;color:var(--muted)}
+.qstat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qstat div{background:var(--surface-2);border-radius:8px;padding:8px 10px}
+.qstat b{display:block;font-family:var(--f-display);font-weight:400;font-size:22px;line-height:1.2}
+.ticket{font-family:var(--f-display);font-size:24px;min-width:56px;text-align:center;line-height:1}
+.ticket small{display:block;font-family:var(--f-body);font-size:10px;color:var(--muted)}
+.list>li.st-call{background:color-mix(in srgb,var(--crit) 7%,transparent);border-radius:8px;padding-inline:8px}
+.list>li.st-off .grow{color:var(--muted)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.slot{border:1px solid var(--line);background:var(--surface-2);border-radius:var(--r);padding:10px;text-align:left;display:grid;gap:4px;min-width:0}
+.slot .t{font-family:var(--f-display);font-size:18px;line-height:1.1}
+.slot .who{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.slot[aria-pressed="true"]{border:2px solid var(--beni)}
+.slot.full{opacity:.6}
+.slot.past{opacity:.45}
+.capbar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.capbar i{display:block;height:100%;background:var(--ok)}
+.slot.full .capbar i{background:var(--crit)}
+
+/* 呼び出し画面 */
+.callscreen{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;grid-template-rows:auto 1fr auto;padding:calc(16px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));gap:12px}
+.callscreen .cs-head{display:flex;align-items:center;gap:12px}
+.callscreen .cs-head h2{font-family:var(--f-display);font-weight:400;font-size:clamp(20px,4vw,34px)}
+.cs-main{display:grid;align-content:center;justify-items:center;gap:10px;text-align:center}
+.cs-label{font-size:clamp(16px,3vw,26px);font-weight:700;color:var(--muted)}
+.cs-nums{display:flex;flex-wrap:wrap;justify-content:center;gap:2vw 5vw}
+.cs-nums span{font-family:var(--f-display);font-size:clamp(72px,18vw,220px);line-height:1;color:var(--crit)}
+.cs-next{font-size:clamp(18px,3.4vw,32px);font-weight:700}
+.cs-next b{font-family:var(--f-display);font-weight:400;margin:0 .4em}
+
+/* 連絡 */
+.note{display:grid;gap:4px;padding:12px 0;border-top:1px solid var(--line)}
+.note:first-child{border-top:0}
+.note.done .ntext{color:var(--muted);text-decoration:line-through}
+.nhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ntext{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
+
+.share{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+@media (max-width:520px){.share{grid-template-columns:1fr}}
+#qr{background:#fff;padding:10px;border-radius:8px;width:fit-content}
+#qr img,#qr canvas{display:block;width:160px;height:160px}
+.urlbox{font-size:14px;word-break:break-all;background:var(--surface-2);padding:8px 10px;border-radius:8px;border:1px solid var(--line)}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;display:flex;gap:12px;align-items:center;z-index:70;max-width:calc(100% - 32px);font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.toast button{background:none;border:1px solid currentColor;color:inherit;border-radius:6px;padding:3px 10px;font-weight:700;white-space:nowrap}
+
+@media (max-width:700px){
+  .tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);justify-content:space-around;gap:0;padding-bottom:env(safe-area-inset-bottom,0px);z-index:25}
+  .tab{flex:1;justify-content:center;padding:12px 2px 13px;font-size:12px;border-bottom:0;border-top:3px solid transparent;position:relative}
+  .tab[aria-current="page"]{border-top-color:var(--beni)}
+  .tab .badge{position:absolute;top:2px;right:calc(50% - 30px)}
+  main{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  .hbar{grid-template-columns:80px 1fr 36px}
+  .top-right{margin-left:0;width:100%;justify-content:space-between}
+}
+@media (prefers-reduced-motion:no-preference){.fill,.bar,.capbar i{transition:height .3s,width .3s}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="maku" aria-hidden="true"></div>
+  <div class="top-in pad">
+    <div class="brand">あそび記録帳<small>学校祭 トントン相撲・絵合わせ・福笑い・けん玉</small></div>
+    <div class="top-right">
+      <div class="seg" id="day-pick" aria-label="今日は何日目？"><button data-d="1">1日目<small>在校生・先生</small></button><button data-d="2">2日目<small>一般</small></button></div>
+      <div class="conn" id="conn" data-s="wait"><span class="dot"></span><span id="conn-t">準備中…</span></div>
+    </div>
+  </div>
+  <nav class="tabs pad" aria-label="画面切り替え">
+    <button class="tab" data-view="record">記録</button>
+    <button class="tab" data-view="guest">受付<span class="badge" id="wait-badge" hidden>0</span></button>
+    <button class="tab" data-view="ranking">ランキング</button>
+    <button class="tab" data-view="stats">集計</button>
+    <button class="tab" data-view="board">連絡<span class="badge" id="urgent-badge" hidden>0</span></button>
+    <button class="tab" data-view="settings">設定</button>
+  </nav>
+</header>
+
+<main class="pad">
+  <div class="banner" id="banner" hidden></div>
+
+  <!-- 記録 -->
+  <section class="view" id="v-record">
+    <div class="card">
+      <div class="label">ゲームを選ぶ</div>
+      <div class="games" id="game-pick"></div>
+
+      <div class="gpanel" data-g="sumo">
+        <div class="row">
+          <div class="field"><label class="label" for="sumo-east">東の力士（名前）</label><input type="text" id="sumo-east" list="names" maxlength="20" placeholder="例：たけし" autocomplete="off"></div>
+          <div class="field"><label class="label" for="sumo-west">西の力士（名前）</label><input type="text" id="sumo-west" list="names" maxlength="20" placeholder="空欄なら「係」" autocomplete="off"></div>
+        </div>
+        <div class="field"><span class="label">勝ったのは</span>
+          <div class="side" id="sumo-win"><button class="sidebtn" data-v="east" aria-pressed="true">東の勝ち</button><button class="sidebtn" data-v="west" aria-pressed="false">西の勝ち</button></div>
+        </div>
+        <div class="field"><span class="label">決まり手</span><div class="chips" id="sumo-kima"></div></div>
+      </div>
+
+      <div class="gpanel" data-g="eawase" hidden>
+        <div class="field"><label class="label" for="ea-name">名前</label><input type="text" id="ea-name" list="names" maxlength="20" placeholder="例：はなこ" autocomplete="off"></div>
+        <div class="field"><span class="label">タイマー</span>
+          <div class="watch"><output id="sw-out">0.0秒</output>
+            <button class="btn primary" id="sw-start">スタート</button>
+            <button class="btn" id="sw-reset">リセット</button>
+            <span class="hint">止めるとクリアタイムに入ります</span></div>
+        </div>
+        <div class="row">
+          <div class="field"><label class="label" for="ea-sec">クリアタイム（秒）</label>
+            <div class="stepper"><button data-step="ea-sec" data-d="-1" aria-label="1秒減らす">−</button><input type="number" id="ea-sec" min="0" step="0.1" inputmode="decimal" placeholder="0"><button data-step="ea-sec" data-d="1" aria-label="1秒増やす">＋</button></div></div>
+          <div class="field"><label class="label" for="ea-miss">まちがえた回数</label>
+            <div class="stepper"><button data-step="ea-miss" data-d="-1" aria-label="1回減らす">−</button><input type="number" id="ea-miss" min="0" step="1" inputmode="numeric" value="0"><button data-step="ea-miss" data-d="1" aria-label="1回増やす">＋</button></div></div>
+        </div>
+      </div>
+
+      <div class="gpanel" data-g="fuku" hidden>
+        <div class="field"><label class="label" for="fu-name">名前</label><input type="text" id="fu-name" list="names" maxlength="20" placeholder="例：ゆうと" autocomplete="off"></div>
+        <div class="field"><span class="label">笑い度</span><div class="stars" id="fu-stars"></div></div>
+        <div class="field"><label class="label" for="fu-com">ひとこと（どんな顔になった？）</label><input type="text" id="fu-com" maxlength="60" placeholder="例：目が両方あごに来た"></div>
+      </div>
+
+      <div class="gpanel" data-g="kendama" hidden>
+        <div class="field"><label class="label" for="ke-name">名前</label><input type="text" id="ke-name" list="names" maxlength="20" placeholder="例：そうた" autocomplete="off"></div>
+        <div class="field"><span class="label">成功した技（タップで選択・数字は点数）</span><div class="chips" id="ke-waza"></div></div>
+        <div class="field"><label class="label" for="ke-mosi">もしかめ回数</label>
+          <div class="stepper"><button data-step="ke-mosi" data-d="-1" aria-label="1回減らす">−</button><input type="number" id="ke-mosi" min="0" step="1" inputmode="numeric" value="0"><button data-step="ke-mosi" data-d="1" aria-label="1回増やす">＋</button></div></div>
+      </div>
+
+      <div class="field"><span class="label" id="grp-label">区分（任意）</span><div class="chips" id="grp"></div></div>
+      <div class="field" id="cls-field"><label class="label" for="cls">クラス（任意・例：2年3組）</label><input type="text" id="cls" list="classes" maxlength="12" autocomplete="off"></div>
+      <button class="btn primary big" id="submit">記録する</button>
+      <datalist id="names"></datalist><datalist id="classes"></datalist>
+    </div>
+    <div class="card">
+      <h2>さっき入った記録</h2>
+      <ul class="list" id="recent"></ul>
+    </div>
+  </section>
+
+  <!-- 受付 -->
+  <section class="view" id="v-guest" hidden>
+    <div class="row" style="align-items:center">
+      <div class="seg" id="guest-mode"><button data-m="queue" aria-pressed="true">順番待ち（整理券）</button><button data-m="resv" aria-pressed="false">時間予約</button></div>
+      <div class="field push" style="flex:0 1 260px"><label class="label" for="g-q">お客様をさがす</label><input type="search" id="g-q" placeholder="名前 または 整理券番号"></div>
+    </div>
+
+    <div id="g-queue" class="view">
+      <div class="card callboard">
+        <div class="field"><span class="label">いま呼び出し中</span><div class="nowcall" id="nowcall"></div>
+          <div class="row"><button class="btn primary" id="q-next">次の人を呼ぶ</button><button class="btn" id="open-call">呼び出し画面を開く</button></div></div>
+        <div class="field"><span class="label">待っている人</span><div class="qstat" id="qstat"></div><p class="hint" id="q-est"></p></div>
+      </div>
+      <div class="card">
+        <h2>整理券を発行</h2>
+        <div class="row">
+          <div class="field"><label class="label" for="q-name">お名前（呼び名でOK）</label><input type="text" id="q-name" maxlength="20" placeholder="例：やまだ" autocomplete="off"></div>
+          <div class="field" style="flex:0 0 auto"><label class="label" for="q-size">人数</label>
+            <div class="stepper"><button data-step="q-size" data-d="-1" data-min="1" aria-label="1人減らす">−</button><input type="number" id="q-size" min="1" value="1" inputmode="numeric"><button data-step="q-size" data-d="1" aria-label="1人増やす">＋</button></div></div>
+        </div>
+        <div class="field"><span class="label">遊びたいゲーム</span><div class="chips" id="q-game"></div></div>
+        <button class="btn primary big" id="q-issue">整理券を発行する</button>
+      </div>
+      <div class="card">
+        <div class="row" style="align-items:center"><h2>整理券の一覧</h2>
+          <label class="hint push" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="q-showdone"> 終わった整理券も表示</label></div>
+        <ul class="list" id="q-list"></ul>
+      </div>
+    </div>
+
+    <div id="g-resv" class="view" hidden>
+      <div class="card">
+        <div class="row" style="align-items:center"><h2 id="resv-title">予約シート</h2><span class="hint push" id="resv-sum"></span></div>
+        <p class="hint">時間をタップすると、その枠に予約を入れられます。枠の時間・数は「設定」で変えられます。</p>
+        <div class="slots" id="slots"></div>
+      </div>
+      <div class="card" id="resv-form" hidden>
+        <h2 id="resv-form-title">予約を入れる</h2>
+        <div class="row">
+          <div class="field"><label class="label" for="r-name">お名前</label><input type="text" id="r-name" maxlength="20" autocomplete="off"></div>
+          <div class="field" style="flex:0 0 auto"><label class="label" for="r-size">人数</label>
+            <div class="stepper"><button data-step="r-size" data-d="-1" data-min="1" aria-label="1人減らす">−</button><input type="number" id="r-size" min="1" value="1" inputmode="numeric"><button data-step="r-size" data-d="1" aria-label="1人増やす">＋</button></div></div>
+        </div>
+        <div class="field"><span class="label">遊びたいゲーム</span><div class="chips" id="r-game"></div></div>
+        <div class="field"><label class="label" for="r-memo">メモ（クラス・連絡など）</label><input type="text" id="r-memo" maxlength="40" placeholder="例：2年3組／車いす利用"></div>
+        <div class="row"><button class="btn" id="r-cancel">やめる</button><button class="btn primary push" id="r-save">予約する</button></div>
+      </div>
+      <div class="card">
+        <h2>予約の一覧</h2>
+        <ul class="list" id="r-list"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ランキング -->
+  <section class="view" id="v-ranking" hidden>
+    <div class="row" style="align-items:center">
+      <div class="seg" id="rank-game"></div>
+      <div class="seg period push"></div>
+    </div>
+    <div class="card" id="rank-card"></div>
+  </section>
+
+  <!-- 集計 -->
+  <section class="view" id="v-stats" hidden>
+    <div class="row" style="align-items:center"><h2 class="vh">集計</h2><div class="seg period push"></div></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="card"><h2>ゲーム別のプレイ数</h2><div class="hbars" id="by-game"></div></div>
+    <div class="card"><h2>時間帯別のプレイ数</h2><div id="by-hour"></div></div>
+    <div class="card"><h2>区分別</h2><div class="hbars" id="by-grp"></div></div>
+    <div class="card" id="cls-card"><h2>クラス対抗（1日目・プレイ数）</h2><div class="hbars" id="by-cls"></div></div>
+    <div class="card">
+      <div class="row" style="align-items:center"><h2>全記録</h2><button class="btn sm push" id="csv">CSVで保存</button></div>
+      <div class="row">
+        <div class="field"><label class="label" for="q">名前・クラスでさがす</label><input type="search" id="q" placeholder="名前の一部"></div>
+        <div class="field"><label class="label" for="qg">ゲーム</label><select id="qg"><option value="">すべて</option></select></div>
+      </div>
+      <ul class="list" id="all-list"></ul>
+    </div>
+  </section>
+
+  <!-- 連絡 -->
+  <section class="view" id="v-board" hidden>
+    <div class="card">
+      <h2>係への連絡</h2>
+      <div class="field"><label class="label" for="nt-text">内容</label><textarea id="nt-text" maxlength="300" placeholder="例：絵合わせのカードが1枚足りません。予備を持ってきてください"></textarea></div>
+      <div class="field"><span class="label">種類</span><div class="chips" id="nt-tag"></div></div>
+      <div class="row"><span class="hint" id="nt-who"></span><button class="btn primary push" id="nt-post">投稿する</button></div>
+    </div>
+    <div class="card">
+      <div class="row" style="align-items:center"><h2>連絡一覧</h2>
+        <label class="hint push" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="nt-open"> 未対応だけ表示</label></div>
+      <div id="notes"></div>
+    </div>
+  </section>
+
+  <!-- 設定 -->
+  <section class="view" id="v-settings" hidden>
+    <div class="card">
+      <h2>みんなに配るリンク</h2>
+      <div class="share"><div id="qr" aria-label="このサイトのQRコード"></div>
+        <div class="field"><div class="urlbox" id="site-url"></div><div class="row"><button class="btn" id="copy-url">リンクをコピー</button></div>
+        <p class="hint">このリンクかQRコードを係のみんなに送るだけで使えます。ログインは要りません。</p></div></div>
+    </div>
+    <div class="card">
+      <h2>この端末の設定</h2>
+      <div class="field"><label class="label" for="staff">あなたの名前（係）</label><input type="text" id="staff" maxlength="16" placeholder="例：2-3 さとう"></div>
+      <p class="hint">連絡や記録に「だれが入れたか」として表示されます。この端末だけに保存されます。</p>
+    </div>
+    <div class="card">
+      <h2>学校祭の設定（全員共通）</h2>
+      <div class="row">
+        <div class="field"><label class="label" for="cf-day1">1日目の日付（在校生・先生）</label><input type="date" id="cf-day1"></div>
+        <div class="field"><label class="label" for="cf-day2">2日目の日付（一般）</label><input type="date" id="cf-day2"></div>
+      </div>
+      <p class="hint">日付を入れておくと、当日は自動で「1日目／2日目」に切り替わります。</p>
+      <div class="row">
+        <div class="field"><label class="label" for="cf-start">予約の受付開始</label><input type="time" id="cf-start"></div>
+        <div class="field"><label class="label" for="cf-end">予約の受付終了</label><input type="time" id="cf-end"></div>
+        <div class="field"><label class="label" for="cf-min">1枠の長さ（分）</label><input type="number" id="cf-min" min="5" max="120" step="5"></div>
+        <div class="field"><label class="label" for="cf-cap">1枠に入れる組数</label><input type="number" id="cf-cap" min="1" max="50"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label class="label" for="cf-per">整理券：1組あたりの目安（分）</label><input type="number" id="cf-per" min="1" max="60"></div>
+      </div>
+      <div class="row"><button class="btn primary push" id="cf-save">保存する</button></div>
+    </div>
+    <div class="card">
+      <h2>データの保存先</h2>
+      <p class="hint" id="mode-info"></p>
+      <div class="row" id="local-tools" hidden><button class="btn danger" id="local-clear">お試しデータを全部消す</button></div>
+    </div>
+  </section>
+</main>
+
+<div class="callscreen" id="callscreen" hidden>
+  <div class="cs-head"><h2>お呼び出し</h2><button class="btn push" id="close-call">閉じる</button></div>
+  <div class="cs-main">
+    <div class="cs-label">整理券番号をお持ちの方は受付へどうぞ</div>
+    <div class="cs-nums" id="cs-nums"></div>
+    <div class="cs-next" id="cs-next"></div>
+  </div>
+  <div class="hint" id="cs-foot" style="text-align:center"></div>
+</div>
+<div class="toast" id="toast" hidden role="status"><span id="toast-t"></span><button id="toast-b" hidden></button></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* =====================================================================
+   ★ ここだけ書きかえます ★
+   Firebase の Realtime Database の URL を "" の中に貼り付けてください。
+   例： "https://gakusai-xxxx-default-rtdb.asia-southeast1.firebasedatabase.app"
+   空のままだと「お試しモード」（この端末の中だけに保存）で動きます。
+   ===================================================================== */
+const DATABASE_URL = "";
+</script>
+<script>
+(() => {
+"use strict";
+const ROOT = "gakusai";
+const LKEY = "gakusai-local-data";
+
+/* ---------- 保存先（Firebase か、お試しのローカル） ---------- */
+let timeOffset = 0;
+const now = () => Date.now() + timeOffset;
+function firebaseStore(){
+  firebase.initializeApp({databaseURL: DATABASE_URL});
+  const db = firebase.database();
+  const ref = p => db.ref(ROOT + "/" + p);
+  db.ref(".info/serverTimeOffset").on("value", s => { timeOffset = s.val() || 0; });
+  return {
+    mode: "cloud",
+    on(p, cb, err){ ref(p).on("value", s => cb(s.val()), err); },
+    push(p, d){ const r = ref(p).push(); return {key: r.key, done: r.set(d)}; },
+    set: (p, d) => ref(p).set(d),
+    update: (p, d) => ref(p).update(d),
+    remove: p => ref(p).remove(),
+    async next(p){ const r = await ref(p).transaction(n => (n || 0) + 1); return r.snapshot.val(); },
+    onConn(cb){ db.ref(".info/connected").on("value", s => cb(!!s.val())); },
+  };
+}
+function localStore(){
+  let data = {};
+  const load = () => { try { data = JSON.parse(localStorage.getItem(LKEY)) || {}; } catch(e){ data = {}; } };
+  load();
+  const subs = [];
+  const get = p => p.split("/").reduce((o, k) => (o && typeof o === "object") ? o[k] : undefined, data) ?? null;
+  const emit = () => subs.forEach(([p, cb]) => cb(get(p)));
+  const save = () => { try { localStorage.setItem(LKEY, JSON.stringify(data)); } catch(e){} emit(); };
+  function put(p, v){
+    const ks = p.split("/"); let o = data;
+    ks.slice(0, -1).forEach(k => { if (!o[k] || typeof o[k] !== "object") o[k] = {}; o = o[k]; });
+    if (v == null) delete o[ks[ks.length-1]]; else o[ks[ks.length-1]] = JSON.parse(JSON.stringify(v));
+  }
+  window.addEventListener("storage", e => { if (e.key === LKEY){ load(); emit(); } });
+  return {
+    mode: "local",
+    on(p, cb){ subs.push([p, cb]); setTimeout(() => cb(get(p))); },
+    push(p, d){ const k = Date.now().toString(36) + Math.random().toString(36).slice(2, 6); put(p + "/" + k, d); save(); return {key: k, done: Promise.resolve()}; },
+    set(p, d){ put(p, d); save(); return Promise.resolve(); },
+    update(p, d){ Object.entries(d).forEach(([k, v]) => put(p + "/" + k, v)); save(); return Promise.resolve(); },
+    remove(p){ put(p, null); save(); return Promise.resolve(); },
+    async next(p){ const n = (get(p) || 0) + 1; put(p, n); save(); return n; },
+    onConn(cb){ cb(true); },
+    clear(){ data = {}; save(); },
+  };
+}
+
+/* ---------- 定数 ---------- */
+const GAMES = {
+  sumo:    {n:"トントン相撲", s:"相撲",    c:"--g-sumo",    sub:"勝ち数で番付"},
+  eawase:  {n:"絵合わせ",     s:"絵合わせ", c:"--g-eawase",  sub:"タイムで勝負"},
+  fuku:    {n:"福笑い",       s:"福笑い",  c:"--g-fuku",    sub:"笑い度 ★5"},
+  kendama: {n:"けん玉",       s:"けん玉",  c:"--g-kendama", sub:"技の点数"},
+};
+const GORDER = ["sumo","eawase","fuku","kendama"];
+const KIMARITE = ["押し出し","寄り切り","突き倒し","うっちゃり","自滅（転倒）","土俵割れ"];
+const WAZA = [["大皿",1],["小皿",1],["中皿",2],["ろうそく",2],["とめけん",3],["ふりけん",3],["飛行機",4],["日本一周",4],["世界一周",5],["灯台",5]];
+const GROUPS = {1:["生徒","先生"], 2:["未就学児","小学生","中高生","大人"]};
+const DAYNAME = {1:"1日目", 2:"2日目", all:"全日程"};
+const TAGS = {urgent:["至急","crit"], info:["連絡","warn"], memo:["メモ","ok"]};
+const BANZUKE = ["横綱","大関","関脇","小結"];
+const QST = {wait:["待ち",""], call:["呼び出し中","crit"], done:["案内済み","ok"], absent:["不在",""], cancel:["取消",""]};
+const RST = {booked:["予約","warn"], came:["来場","ok"], noshow:["来なかった",""], cancel:["取消",""]};
+const DEF_CFG = {day1:"", day2:"", slotStart:"10:00", slotEnd:"15:00", slotMin:15, slotCap:3, perGroup:5};
+
+const S = {
+  store:null, records:[], notes:[], queue:[], resv:[], cfg:{...DEF_CFG},
+  loaded:{records:false, notes:false, queue:false, resv:false},
+  fday:1, dayTouched:false, period:1,
+  game:"sumo", rankGame:"sumo", winner:"east", kima:KIMARITE[0], stars:3, waza:new Set(), grp:"",
+  ntTag:"info", guestMode:"queue", qGame:"", rGame:"", rSlot:null, staff:"",
+};
+
+/* ---------- 小道具 ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const gc = g => `style="--gc:var(${GAMES[g] ? GAMES[g].c : "--muted"})"`;
+const pad2 = n => String(n).padStart(2, "0");
+const dayKey = ts => { const d = new Date(ts); return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; };
+const hm = ts => { const d = new Date(ts); return `${d.getHours()}:${pad2(d.getMinutes())}`; };
+const clean = s => String(s || "").trim().replace(/\s+/g, " ").slice(0, 20);
+const toList = o => o ? Object.entries(o).filter(([,v]) => v && typeof v === "object").map(([id, v]) => ({id, ...v})) : [];
+const inPeriod = r => S.period === "all" || r.fday === S.period;
+const kePoints = r => (r.waza || []).reduce((a, w) => a + ((WAZA.find(x => x[0] === w) || [0,0])[1]), 0);
+const lsGet = k => { try { return localStorage.getItem(k); } catch(e){ return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e){} };
+const mins = t => { const [h, m] = String(t || "0:0").split(":").map(Number); return (h||0)*60 + (m||0); };
+const fmtMin = m => `${Math.floor(m/60)}:${pad2(m%60)}`;
+function pressGroup(container, attr, current){
+  container.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset[attr] === String(current))));
+}
+function chipSel(el, items, cur, onPick){
+  el.innerHTML = items.map(([v, n]) => `<button class="chip" data-v="${esc(v)}" aria-pressed="${v === cur}">${n}</button>`).join("");
+  el.onclick = e => { const b = e.target.closest("button"); if (!b) return; onPick(b.dataset.v); pressGroup(el, "v", b.dataset.v); };
+}
+
+/* ---------- お知らせ ---------- */
+let toastTimer;
+function toast(msg, action){
+  $("#toast-t").textContent = msg;
+  const b = $("#toast-b"); b.hidden = !action;
+  if (action){ b.textContent = action.label; b.onclick = () => { $("#toast").hidden = true; action.fn(); }; }
+  $("#toast").hidden = false; clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { $("#toast").hidden = true; }, action ? 7000 : 3000);
+}
+const failed = () => toast("保存できませんでした。通信を確認してもう一度押してください");
+function banner(html){ const b = $("#banner"); b.hidden = !html; b.innerHTML = html || ""; }
+
+/* ---------- 画面切り替え ---------- */
+const VIEWS = ["record","guest","ranking","stats","board","settings"];
+function route(){
+  const h = location.hash.slice(1);
+  $("#callscreen").hidden = h !== "call";
+  if (h === "call"){ renderCallScreen(); return; }
+  const v = VIEWS.includes(h) ? h : "record";
+  VIEWS.forEach(x => { $("#v-" + x).hidden = x !== v; });
+  $$(".tab").forEach(t => { if (t.dataset.view === v) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  if (v === "settings") renderShare();
+}
+$$(".tab").forEach(t => t.onclick = () => { location.hash = t.dataset.view; window.scrollTo(0, 0); });
+window.addEventListener("hashchange", route);
+
+/* ---------- 1日目 / 2日目 ---------- */
+function setDay(d, touched){
+  S.fday = d; S.period = d; if (touched){ S.dayTouched = true; lsSet("fday", String(d)); }
+  pressGroup($("#day-pick"), "d", d);
+  drawPeriods(); drawGroups(); renderAll();
+}
+$("#day-pick").onclick = e => { const b = e.target.closest("button"); if (b) setDay(+b.dataset.d, true); };
+function autoDay(){
+  if (S.dayTouched) return;
+  const t = dayKey(now());
+  if (S.cfg.day1 === t) return setDay(1);
+  if (S.cfg.day2 === t) return setDay(2);
+}
+function drawPeriods(){
+  $$(".seg.period").forEach(seg => {
+    seg.innerHTML = [1, 2, "all"].map(p => `<button data-p="${p}" aria-pressed="${p === S.period}">${DAYNAME[p]}</button>`).join("");
+    seg.onclick = e => { const b = e.target.closest("button"); if (!b) return; S.period = b.dataset.p === "all" ? "all" : +b.dataset.p; drawPeriods(); renderRanking(); renderStats(); };
+  });
+}
+function drawGroups(){
+  if (!GROUPS[S.fday].includes(S.grp)) S.grp = "";
+  $("#grp-label").textContent = S.fday === 1 ? "区分（1日目：在校生・先生）" : "区分（2日目：一般のお客様）";
+  chipSel($("#grp"), [["", "指定なし"], ...GROUPS[S.fday].map(g => [g, g])], S.grp, v => { S.grp = v; });
+  $("#cls-field").hidden = S.fday !== 1;
+}
+
+/* ---------- 記録フォーム ---------- */
+$("#game-pick").innerHTML = GORDER.map(g => `<button class="gbtn" data-g="${g}" ${gc(g)} aria-pressed="${g === S.game}"><i></i>${GAMES[g].n}<small>${GAMES[g].sub}</small></button>`).join("");
+function pickGame(g){ S.game = g; pressGroup($("#game-pick"), "g", g); $$(".gpanel").forEach(p => p.hidden = p.dataset.g !== g); }
+$("#game-pick").onclick = e => { const b = e.target.closest("button"); if (b) pickGame(b.dataset.g); };
+$("#sumo-win").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.winner = b.dataset.v; pressGroup($("#sumo-win"), "v", S.winner); };
+chipSel($("#sumo-kima"), KIMARITE.map(k => [k, k]), S.kima, v => { S.kima = v; });
+function drawStars(){ $("#fu-stars").innerHTML = [1,2,3,4,5].map(n => `<button class="star" data-v="${n}" aria-label="笑い度${n}" aria-pressed="${n <= S.stars}">★</button>`).join(""); }
+drawStars();
+$("#fu-stars").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.stars = +b.dataset.v; drawStars(); };
+function drawWaza(){ $("#ke-waza").innerHTML = WAZA.map(([w, p]) => `<button class="chip" data-v="${w}" aria-pressed="${S.waza.has(w)}">${w}<b>${p}</b></button>`).join(""); }
+drawWaza();
+$("#ke-waza").onclick = e => { const b = e.target.closest("button"); if (!b) return; const w = b.dataset.v; S.waza.has(w) ? S.waza.delete(w) : S.waza.add(w); drawWaza(); };
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-step]"); if (!b) return;
+  const inp = $("#" + b.dataset.step); const min = +(b.dataset.min || 0);
+  const v = Math.max(min, (parseFloat(inp.value) || 0) + (+b.dataset.d));
+  inp.value = Math.round(v * 10) / 10;
+});
+
+let swStart = 0, swRaf = 0, swAcc = 0;
+const swShow = ms => { $("#sw-out").textContent = (ms / 1000).toFixed(1) + "秒"; };
+$("#sw-start").onclick = () => {
+  if (swStart){ swAcc += performance.now() - swStart; swStart = 0; cancelAnimationFrame(swRaf); $("#sw-start").textContent = "再開"; $("#ea-sec").value = (swAcc / 1000).toFixed(1); swShow(swAcc); return; }
+  swStart = performance.now(); $("#sw-start").textContent = "ストップ";
+  const tick = () => { swShow(swAcc + performance.now() - swStart); swRaf = requestAnimationFrame(tick); }; tick();
+};
+$("#sw-reset").onclick = () => { swStart = 0; swAcc = 0; cancelAnimationFrame(swRaf); swShow(0); $("#sw-start").textContent = "スタート"; };
+
+function buildRecord(){
+  const base = {game:S.game, ts:now(), fday:S.fday, grp:S.grp, by:S.staff};
+  if (S.fday === 1){ const c = clean($("#cls").value).slice(0, 12); if (c) base.cls = c; }
+  if (S.game === "sumo"){
+    const east = clean($("#sumo-east").value), west = clean($("#sumo-west").value) || "係";
+    if (!east) return "東の力士の名前を入れてください";
+    if (east === west) return "東と西が同じ名前です";
+    return {...base, east, west, winner:S.winner, kimarite:S.kima, name: S.winner === "east" ? east : west};
+  }
+  if (S.game === "eawase"){
+    const name = clean($("#ea-name").value), sec = parseFloat($("#ea-sec").value);
+    if (!name) return "名前を入れてください";
+    if (!(sec > 0)) return "クリアタイムを入れてください（タイマーを使うと自動で入ります）";
+    return {...base, name, sec:Math.round(sec * 10) / 10, miss:Math.max(0, parseInt($("#ea-miss").value) || 0)};
+  }
+  if (S.game === "fuku"){
+    const name = clean($("#fu-name").value); if (!name) return "名前を入れてください";
+    return {...base, name, stars:S.stars, comment:String($("#fu-com").value || "").trim().slice(0, 60)};
+  }
+  const name = clean($("#ke-name").value); if (!name) return "名前を入れてください";
+  const mosi = Math.max(0, parseInt($("#ke-mosi").value) || 0);
+  if (!S.waza.size && !mosi) return "成功した技か、もしかめ回数を入れてください";
+  return {...base, name, waza:WAZA.map(w => w[0]).filter(w => S.waza.has(w)), mosi};
+}
+function resetForm(){
+  if (S.game === "sumo"){ $("#sumo-east").value = ""; $("#sumo-west").value = ""; }
+  if (S.game === "eawase"){ $("#ea-name").value = ""; $("#ea-sec").value = ""; $("#ea-miss").value = "0"; $("#sw-reset").click(); }
+  if (S.game === "fuku"){ $("#fu-name").value = ""; $("#fu-com").value = ""; S.stars = 3; drawStars(); }
+  if (S.game === "kendama"){ $("#ke-name").value = ""; $("#ke-mosi").value = "0"; S.waza.clear(); drawWaza(); }
+  $("#cls").value = "";
+}
+$("#submit").onclick = () => {
+  if (!S.store){ toast("まだ準備中です。少し待ってください"); return; }
+  const r = buildRecord(); if (typeof r === "string"){ toast(r); return; }
+  const {key, done} = S.store.push("records", r);
+  done.catch(failed);
+  resetForm();
+  toast(`${GAMES[r.game].n}の記録を保存しました`, {label:"取り消す", fn: () => S.store.remove("records/" + key).then(() => toast("取り消しました"), failed)});
+};
+function prefillName(name, game){
+  if (game && GAMES[game]) pickGame(game);
+  const id = {sumo:"#sumo-east", eawase:"#ea-name", fuku:"#fu-name", kendama:"#ke-name"}[S.game];
+  $(id).value = name || "";
+  location.hash = "record"; window.scrollTo(0, 0);
+}
+
+/* ---------- 記録の表示 ---------- */
+function summary(r){
+  if (r.game === "sumo"){
+    const w = r.winner === "east" ? r.east : r.west, l = r.winner === "east" ? r.west : r.east;
+    return `<b>${esc(w)}</b> ○ ${esc(r.kimarite)} ● ${esc(l)}`;
+  }
+  if (r.game === "eawase") return `<b>${esc(r.name)}</b>　${r.sec}秒・ミス${r.miss}回`;
+  if (r.game === "fuku") return `<b>${esc(r.name)}</b>　${"★".repeat(r.stars || 0)}${r.comment ? `「${esc(r.comment)}」` : ""}`;
+  return `<b>${esc(r.name)}</b>　${kePoints(r)}点${(r.waza || []).length ? `（${esc(r.waza.join("・"))}）` : ""}${r.mosi ? `・もしかめ${r.mosi}回` : ""}`;
+}
+function recordLi(r){
+  const meta = [`${DAYNAME[r.fday] || ""} ${hm(r.ts)}`, r.grp, r.cls, r.by ? `入力：${r.by}` : ""].filter(Boolean).map(esc).join("・");
+  return `<li><span class="gtag" ${gc(r.game)}>${GAMES[r.game] ? GAMES[r.game].s : "?"}</span><div class="grow">${summary(r)}<div class="meta">${meta}</div></div><button class="btn sm danger" data-del="records/${esc(r.id)}">削除</button></li>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-del]"); if (!b) return;
+  if (!b.dataset.armed){ b.dataset.armed = "1"; b.textContent = "本当に削除？"; setTimeout(() => { if (b.isConnected){ delete b.dataset.armed; b.textContent = "削除"; } }, 4000); return; }
+  b.disabled = true;
+  S.store.remove(b.dataset.del).then(() => toast("削除しました"), () => { failed(); b.disabled = false; });
+});
+function renderRecent(){
+  const el = $("#recent");
+  if (!S.loaded.records){ el.innerHTML = `<li class="empty">記録を読み込んでいます…</li>`; return; }
+  const list = S.records.slice(0, 12);
+  el.innerHTML = list.length ? list.map(recordLi).join("") : `<li class="empty">まだ記録がありません。上でゲームを選んで、最初の記録を入れてみましょう。</li>`;
+  const names = [...new Set(S.records.slice(0, 400).flatMap(r => r.game === "sumo" ? [r.east, r.west] : [r.name]).filter(n => n && n !== "係"))].slice(0, 100);
+  $("#names").innerHTML = names.map(n => `<option value="${esc(n)}"></option>`).join("");
+  const cls = [...new Set(S.records.map(r => r.cls).filter(Boolean))].slice(0, 60);
+  $("#classes").innerHTML = cls.map(n => `<option value="${esc(n)}"></option>`).join("");
+}
+
+/* ---------- ランキング ---------- */
+$("#rank-game").innerHTML = GORDER.map(g => `<button data-g="${g}" aria-pressed="${g === S.rankGame}">${GAMES[g].s}</button>`).join("");
+$("#rank-game").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.rankGame = b.dataset.g; pressGroup($("#rank-game"), "g", S.rankGame); renderRanking(); };
+function renderRanking(){
+  const el = $("#rank-card"), g = S.rankGame, per = DAYNAME[S.period];
+  if (!S.loaded.records){ el.innerHTML = `<div class="empty">読み込んでいます…</div>`; return; }
+  const recs = S.records.filter(r => r.game === g && inPeriod(r));
+  if (!recs.length){ el.innerHTML = `<h2>${GAMES[g].n}（${per}）</h2><div class="empty">${per}の${GAMES[g].n}の記録はまだありません。</div>`; return; }
+  const whenCol = r => `${S.period === "all" ? DAYNAME[r.fday] + " " : ""}${hm(r.ts)}`;
+  let html = "";
+  if (g === "sumo"){
+    const m = new Map(); const get = n => m.get(n) || (m.set(n, {n, w:0, l:0, streak:0, best:0}), m.get(n));
+    [...recs].sort((a, b) => a.ts - b.ts).forEach(r => {
+      const w = r.winner === "east" ? r.east : r.west, l = r.winner === "east" ? r.west : r.east;
+      const W = get(w), L = get(l); W.w++; W.streak++; W.best = Math.max(W.best, W.streak); L.l++; L.streak = 0;
+    });
+    const rows = [...m.values()].filter(x => x.n !== "係" && x.w > 0).sort((a, b) => b.w - a.w || b.best - a.best || a.l - b.l).slice(0, 30);
+    const kim = {}; recs.forEach(r => kim[r.kimarite] = (kim[r.kimarite] || 0) + 1);
+    const topK = Object.entries(kim).sort((a, b) => b[1] - a[1])[0];
+    html = `<h2>トントン相撲 番付（${per}）</h2><p class="hint">勝ち数順。同じ勝ち数なら連勝記録が多い方が上。「係」は番付に入りません。${topK ? `いちばん多い決まり手：${esc(topK[0])}（${topK[1]}回）` : ""}</p>
+      <div class="tblwrap"><table><thead><tr><th>順位</th><th>番付</th><th>しこ名</th><th class="num">勝</th><th class="num">負</th><th class="num">最多連勝</th></tr></thead><tbody>
+      ${rows.map((x, i) => `<tr class="${i < 3 ? "podium" : ""}"><td class="rank">${i+1}</td><td>${i < 4 ? `<span class="banzuke ${i === 0 ? "yoko" : ""}">${BANZUKE[i]}</span>` : `<span class="meta">前頭</span>`}</td><td>${esc(x.n)}</td><td class="num">${x.w}</td><td class="num">${x.l}</td><td class="num">${x.best}</td></tr>`).join("")}
+      </tbody></table></div>${rows.length ? "" : `<div class="empty">まだ勝った人がいません</div>`}`;
+  } else if (g === "eawase"){
+    const best = new Map(); recs.forEach(r => { const b = best.get(r.name); if (!b || r.sec < b.sec || (r.sec === b.sec && r.miss < b.miss)) best.set(r.name, r); });
+    const rows = [...best.values()].sort((a, b) => a.sec - b.sec || a.miss - b.miss).slice(0, 30);
+    const avg = recs.reduce((a, r) => a + r.sec, 0) / recs.length;
+    html = `<h2>絵合わせ タイムランキング（${per}）</h2><p class="hint">1人につきいちばん速い記録。同タイムならミスが少ない方が上。平均 ${avg.toFixed(1)}秒（${recs.length}回）</p>
+      <div class="tblwrap"><table><thead><tr><th>順位</th><th>名前</th><th class="num">タイム</th><th class="num">ミス</th><th>時刻</th></tr></thead><tbody>
+      ${rows.map((r, i) => `<tr class="${i < 3 ? "podium" : ""}"><td class="rank">${i+1}</td><td>${esc(r.name)}</td><td class="num">${r.sec}秒</td><td class="num">${r.miss}</td><td class="meta">${whenCol(r)}</td></tr>`).join("")}
+      </tbody></table></div>`;
+  } else if (g === "fuku"){
+    const rows = [...recs].sort((a, b) => b.stars - a.stars || b.ts - a.ts).slice(0, 30);
+    const avg = recs.reduce((a, r) => a + r.stars, 0) / recs.length;
+    html = `<h2>福笑い 笑い度ベスト（${per}）</h2><p class="hint">笑い度の高い順、同じなら新しい順。平均 ★${avg.toFixed(1)}・★5は${recs.filter(r => r.stars === 5).length}回</p>
+      <ul class="list">${rows.map(r => `<li><span class="pill warn">${"★".repeat(r.stars)}</span><div class="grow"><b>${esc(r.name)}</b>${r.comment ? `　「${esc(r.comment)}」` : ""}<div class="meta">${whenCol(r)}</div></div></li>`).join("")}</ul>`;
+  } else {
+    const best = new Map(); recs.forEach(r => { const p = kePoints(r), b = best.get(r.name);
+      if (!b) best.set(r.name, {n:r.name, p, waza:r.waza || [], mosi:r.mosi || 0});
+      else { if (p > b.p){ b.p = p; b.waza = r.waza || []; } b.mosi = Math.max(b.mosi, r.mosi || 0); } });
+    const rows = [...best.values()].sort((a, b) => b.p - a.p || b.mosi - a.mosi).slice(0, 30);
+    const mt = [...best.values()].sort((a, b) => b.mosi - a.mosi)[0];
+    html = `<h2>けん玉 技ランキング（${per}）</h2><p class="hint">1回の挑戦で成功した技の合計点（1人いちばん良い回）。同点ならもしかめ回数で比べます。${mt && mt.mosi ? `もしかめ最多：${esc(mt.n)}さん ${mt.mosi}回` : ""}</p>
+      <div class="tblwrap"><table><thead><tr><th>順位</th><th>名前</th><th class="num">点</th><th>成功した技</th><th class="num">もしかめ</th></tr></thead><tbody>
+      ${rows.map((x, i) => `<tr class="${i < 3 ? "podium" : ""}"><td class="rank">${i+1}</td><td>${esc(x.n)}</td><td class="num">${x.p}</td><td class="meta">${esc(x.waza.join("・")) || "—"}</td><td class="num">${x.mosi}</td></tr>`).join("")}
+      </tbody></table></div>`;
+  }
+  el.innerHTML = html;
+}
+
+/* ---------- 集計 ---------- */
+function hbars(el, items){
+  const max = Math.max(1, ...items.map(i => i.v));
+  el.innerHTML = items.length ? items.map(i => `<div class="hbar" ${i.g ? gc(i.g) : `style="--gc:var(--beni)"`} title="${esc(i.n)}：${i.v}回"><span>${esc(i.n)}</span><div class="track"><div class="fill" style="width:${i.v / max * 100}%"></div></div><span class="n">${i.v}</span></div>`).join("")
+    : `<div class="empty">まだデータがありません</div>`;
+}
+function renderStats(){
+  const recs = S.records.filter(inPeriod);
+  const people = new Set(recs.flatMap(r => r.game === "sumo" ? [r.east, r.west] : [r.name]).filter(n => n && n !== "係")).size;
+  const lastHour = S.records.filter(r => r.ts > now() - 3600e3).length;
+  const guests = S.queue.filter(q => (S.period === "all" || q.fday === S.period) && q.status === "done").length
+               + S.resv.filter(q => (S.period === "all" || q.fday === S.period) && q.status === "came").length;
+  $("#kpis").innerHTML = [["プレイ数", recs.length, "回"], ["遊んだ人（名前の数）", people, "人"], ["直近1時間", lastHour, "回"], ["受付から案内", guests, "組"]]
+    .map(([l, v, u]) => `<div class="kpi"><div class="label">${l}</div><div class="v">${v}<small>${u}</small></div></div>`).join("");
+  hbars($("#by-game"), GORDER.map(g => ({n:GAMES[g].n, v:recs.filter(r => r.game === g).length, g})));
+  const grps = S.period === "all" ? [...GROUPS[1], ...GROUPS[2]] : GROUPS[S.period];
+  hbars($("#by-grp"), [...grps, ""].map(g => ({n:g || "指定なし", v:recs.filter(r => (r.grp || "") === g).length})));
+  $("#cls-card").hidden = S.period === 2;
+  const cc = {}; S.records.filter(r => r.fday === 1 && r.cls).forEach(r => cc[r.cls] = (cc[r.cls] || 0) + 1);
+  hbars($("#by-cls"), Object.entries(cc).sort((a, b) => b[1] - a[1]).slice(0, 15).map(([n, v]) => ({n, v})));
+  const hours = recs.map(r => new Date(r.ts).getHours());
+  const lo = Math.min(9, ...hours), hi = Math.max(15, ...hours);
+  const cnt = {}; hours.forEach(h => cnt[h] = (cnt[h] || 0) + 1);
+  const span = []; for (let h = lo; h <= hi; h++) span.push(h);
+  const max = Math.max(1, ...span.map(h => cnt[h] || 0));
+  const peak = span.reduce((a, h) => (cnt[h] || 0) > (cnt[a] || 0) ? h : a, span[0]);
+  $("#by-hour").innerHTML = recs.length ? `<div class="vchart">${span.map(h => { const v = cnt[h] || 0; return `<div class="vcol" title="${h}時台：${v}回"><span class="c">${v || ""}</span><div class="bar" style="height:${v / max * 82}%"></div></div>`; }).join("")}</div>
+    <div class="vlabels">${span.map(h => `<span>${h}時</span>`).join("")}</div>
+    <p class="hint" style="margin-top:6px">いちばん多いのは${peak}時台（${cnt[peak] || 0}回）です。</p>`
+    : `<div class="empty">記録が入ると、何時台に混んでいるかがここに出ます。</div>`;
+  renderAllList();
+}
+$("#qg").innerHTML += GORDER.map(g => `<option value="${g}">${GAMES[g].n}</option>`).join("");
+$("#q").oninput = () => renderAllList(); $("#qg").onchange = () => renderAllList();
+function renderAllList(){
+  const q = $("#q").value.trim(), g = $("#qg").value;
+  const recs = S.records.filter(r => inPeriod(r) && (!g || r.game === g) && (!q || [r.name, r.east, r.west, r.cls].some(n => n && n.includes(q))));
+  $("#all-list").innerHTML = recs.length ? recs.slice(0, 150).map(recordLi).join("") + (recs.length > 150 ? `<li class="meta">ほか${recs.length - 150}件（名前でしぼりこめます）</li>` : "")
+    : `<li class="empty">${S.loaded.records ? "条件に合う記録はありません" : "読み込んでいます…"}</li>`;
+}
+$("#csv").onclick = () => {
+  const head = ["日","時刻","ゲーム","名前","相手","決まり手","タイム秒","ミス","笑い度","ひとこと","技","点","もしかめ","区分","クラス","入力した係"];
+  const rows = S.records.filter(inPeriod).slice().reverse().map(r => [DAYNAME[r.fday], hm(r.ts), GAMES[r.game].n, r.name,
+    r.game === "sumo" ? (r.winner === "east" ? r.west : r.east) : "", r.kimarite || "", r.sec ?? "", r.miss ?? "", r.stars ?? "", r.comment || "",
+    (r.waza || []).join("・"), r.game === "kendama" ? kePoints(r) : "", r.mosi ?? "", r.grp || "", r.cls || "", r.by || ""]);
+  const csv = "﻿" + [head, ...rows].map(row => row.map(v => { v = String(v ?? ""); return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; }).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+  a.download = `あそび記録_${DAYNAME[S.period]}.csv`; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+};
+
+/* ---------- 受付：順番待ち ---------- */
+$("#guest-mode").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.guestMode = b.dataset.m; pressGroup($("#guest-mode"), "m", S.guestMode); $("#g-queue").hidden = S.guestMode !== "queue"; $("#g-resv").hidden = S.guestMode !== "resv"; };
+const gameChoices = [["", "どれでも"], ...GORDER.map(g => [g, GAMES[g].n])];
+chipSel($("#q-game"), gameChoices, S.qGame, v => { S.qGame = v; });
+chipSel($("#r-game"), gameChoices, S.rGame, v => { S.rGame = v; });
+$("#g-q").oninput = () => { renderQueue(); renderResv(); };
+$("#q-showdone").onchange = () => renderQueue();
+const todayQueue = () => S.queue.filter(q => q.fday === S.fday).sort((a, b) => a.no - b.no);
+const matchQ = (x, q) => !q || (x.name || "").includes(q) || String(x.no) === q.replace(/[^0-9]/g, "");
+const waitedMin = x => Math.max(0, Math.round((now() - x.ts) / 60000));
+$("#q-issue").onclick = async () => {
+  if (!S.store){ toast("まだ準備中です"); return; }
+  const name = clean($("#q-name").value);
+  const size = Math.max(1, parseInt($("#q-size").value) || 1);
+  const btn = $("#q-issue"); btn.disabled = true; btn.textContent = "番号を取っています…";
+  try {
+    const no = await S.store.next(`counters/queue${S.fday}`);
+    S.store.push("queue", {no, name, size, game:S.qGame, status:"wait", ts:now(), fday:S.fday, by:S.staff}).done.catch(failed);
+    $("#q-name").value = ""; $("#q-size").value = "1";
+    toast(`整理券 ${no}番 を発行しました。お客様に番号を伝えてください`);
+  } catch(e){ failed(); }
+  finally { btn.disabled = false; btn.textContent = "整理券を発行する"; }
+};
+function setQ(id, status){
+  const x = S.queue.find(q => q.id === id); if (!x) return;
+  const patch = {status}; if (status === "call") patch.calledAt = now();
+  S.store.update("queue/" + id, patch).catch(failed);
+  if (status === "done") toast(`${x.no}番 ${x.name || ""}さんを案内しました`, {label:"記録を入れる", fn: () => prefillName(x.name, x.game)});
+}
+$("#q-next").onclick = () => {
+  const next = todayQueue().find(q => q.status === "wait");
+  if (!next){ toast("待っている人はいません"); return; }
+  setQ(next.id, "call"); toast(`${next.no}番を呼び出しました`);
+};
+$("#open-call").onclick = () => { location.hash = "call"; };
+$("#close-call").onclick = () => { location.hash = "guest"; };
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-q]"); if (b) setQ(b.dataset.q, b.dataset.st);
+});
+function renderQueue(){
+  const all = todayQueue();
+  const waiting = all.filter(q => q.status === "wait"), calling = all.filter(q => q.status === "call");
+  $("#nowcall").innerHTML = calling.length ? calling.map(q => `<span class="num">${q.no}<small>番</small></span>`).join("") : `<span class="meta">呼び出し中の番号はありません</span>`;
+  const people = waiting.reduce((a, q) => a + (q.size || 1), 0);
+  $("#qstat").innerHTML = `<div><span class="label">待ち</span><b>${waiting.length}</b><span class="meta">組</span></div><div><span class="label">人数</span><b>${people}</b><span class="meta">人</span></div><div><span class="label">発行済み</span><b>${all.length}</b><span class="meta">枚</span></div>`;
+  $("#q-est").textContent = waiting.length ? `今から並ぶと、目安 約${waiting.length * (+S.cfg.perGroup || 5)}分待ち（1組${+S.cfg.perGroup || 5}分で計算）` : "今ならすぐ遊べます";
+  const badge = $("#wait-badge"); badge.hidden = !waiting.length; badge.textContent = waiting.length;
+  const q = $("#g-q").value.trim(), showDone = $("#q-showdone").checked;
+  const list = all.filter(x => (showDone || x.status === "wait" || x.status === "call" || q) && matchQ(x, q));
+  const el = $("#q-list");
+  if (!S.loaded.queue){ el.innerHTML = `<li class="empty">読み込んでいます…</li>`; return; }
+  if (!list.length){ el.innerHTML = `<li class="empty">${q ? "見つかりませんでした" : `${DAYNAME[S.fday]}の待っている人はいません。来たお客様には上で整理券を発行します。`}</li>`; return; }
+  let ahead = 0;
+  el.innerHTML = list.map(x => {
+    const [sn, sc] = QST[x.status] || QST.wait;
+    const off = ["done", "absent", "cancel"].includes(x.status);
+    let acts = "";
+    if (x.status === "wait") acts = `<button class="btn sm primary" data-q="${x.id}" data-st="call">呼ぶ</button><button class="btn sm" data-q="${x.id}" data-st="cancel">取消</button>`;
+    else if (x.status === "call") acts = `<button class="btn sm primary" data-q="${x.id}" data-st="done">案内した</button><button class="btn sm" data-q="${x.id}" data-st="absent">いない</button><button class="btn sm" data-q="${x.id}" data-st="wait">待ちに戻す</button>`;
+    else acts = `<button class="btn sm" data-q="${x.id}" data-st="wait">待ちに戻す</button>`;
+    const pos = x.status === "wait" ? (ahead++ === 0 ? "・次の番" : `・前に${ahead - 1}組`) : "";
+    return `<li class="st-${off ? "off" : x.status}"><div class="ticket">${x.no}<small>番</small></div>
+      <div class="grow"><b>${esc(x.name) || "（名前なし）"}</b>　${x.size || 1}人 ${x.game && GAMES[x.game] ? `<span class="gtag" ${gc(x.game)}>${GAMES[x.game].s}</span>` : ""}
+      <div class="meta"><span class="pill ${sc}">${sn}</span> ${hm(x.ts)}発行${off ? "" : `・${waitedMin(x)}分経過${pos}`}</div></div><div class="acts">${acts}</div></li>`;
+  }).join("");
+}
+function renderCallScreen(){
+  if ($("#callscreen").hidden) return;
+  const all = todayQueue();
+  const calling = all.filter(q => q.status === "call"), next = all.filter(q => q.status === "wait").slice(0, 5);
+  $("#cs-nums").innerHTML = calling.length ? calling.map(q => `<span>${q.no}</span>`).join("") : `<span style="color:var(--muted)">―</span>`;
+  $("#cs-next").innerHTML = next.length ? `次は${next.map(q => `<b>${q.no}</b>`).join("")}番の方` : "ただいま待ち時間なしで遊べます";
+  $("#cs-foot").textContent = `${hm(now())} 更新　待ち ${all.filter(q => q.status === "wait").length}組`;
+}
+
+/* ---------- 受付：時間予約 ---------- */
+function slotList(){
+  const a = mins(S.cfg.slotStart), b = mins(S.cfg.slotEnd), step = Math.max(5, +S.cfg.slotMin || 15);
+  const out = []; for (let t = a; t < b && out.length < 96; t += step) out.push(fmtMin(t));
+  return out;
+}
+const dayResv = () => S.resv.filter(r => r.fday === S.fday);
+function renderResv(){
+  const cap = Math.max(1, +S.cfg.slotCap || 3), list = dayResv();
+  const nowMin = new Date(now()).getHours() * 60 + new Date(now()).getMinutes();
+  const isToday = S.cfg[`day${S.fday}`] === dayKey(now());
+  $("#resv-title").textContent = `予約シート（${DAYNAME[S.fday]}）`;
+  const active = list.filter(r => r.status !== "cancel");
+  $("#resv-sum").textContent = `予約 ${active.length}組・${active.reduce((a, r) => a + (r.size || 1), 0)}人`;
+  const step = Math.max(5, +S.cfg.slotMin || 15);
+  $("#slots").innerHTML = slotList().map(t => {
+    const inSlot = active.filter(r => r.slot === t);
+    const full = inSlot.length >= cap, past = isToday && mins(t) + step <= nowMin;
+    return `<button class="slot ${full ? "full" : ""} ${past ? "past" : ""}" data-slot="${t}" aria-pressed="${S.rSlot === t}">
+      <span class="t">${t}</span><span class="meta">${full ? "満員" : `あと${cap - inSlot.length}組`}（${inSlot.length}/${cap}）</span>
+      <span class="capbar"><i style="width:${Math.min(100, inSlot.length / cap * 100)}%"></i></span>
+      <span class="who">${esc(inSlot.map(r => r.name).join("・"))}</span></button>`;
+  }).join("") || `<div class="empty">設定で予約の時間を入れてください</div>`;
+  const q = $("#g-q").value.trim();
+  const rows = list.filter(r => matchQ(r, q)).sort((a, b) => mins(a.slot) - mins(b.slot) || a.ts - b.ts);
+  const el = $("#r-list");
+  if (!S.loaded.resv){ el.innerHTML = `<li class="empty">読み込んでいます…</li>`; return; }
+  el.innerHTML = rows.length ? rows.map(r => {
+    const [sn, sc] = RST[r.status] || RST.booked; const off = r.status !== "booked";
+    const acts = r.status === "booked"
+      ? `<button class="btn sm primary" data-r="${r.id}" data-st="came">来た</button><button class="btn sm" data-r="${r.id}" data-st="noshow">来ない</button><button class="btn sm" data-r="${r.id}" data-st="cancel">取消</button>`
+      : `<button class="btn sm" data-r="${r.id}" data-st="booked">予約に戻す</button>`;
+    return `<li class="${off ? "st-off" : ""}"><div class="ticket" style="font-size:18px">${esc(r.slot)}</div>
+      <div class="grow"><b>${esc(r.name)}</b>　${r.size || 1}人 ${r.game && GAMES[r.game] ? `<span class="gtag" ${gc(r.game)}>${GAMES[r.game].s}</span>` : ""}
+      <div class="meta"><span class="pill ${sc}">${sn}</span>${r.memo ? `　${esc(r.memo)}` : ""}</div></div><div class="acts">${acts}</div></li>`;
+  }).join("") : `<li class="empty">${q ? "見つかりませんでした" : `${DAYNAME[S.fday]}の予約はまだありません。上の時間をタップして入れます。`}</li>`;
+}
+$("#slots").onclick = e => {
+  const b = e.target.closest("[data-slot]"); if (!b) return;
+  S.rSlot = b.dataset.slot; $("#resv-form").hidden = false;
+  $("#resv-form-title").textContent = `${S.rSlot} の枠に予約を入れる`;
+  pressGroup($("#slots"), "slot", S.rSlot);
+  $("#r-name").focus();
+};
+$("#r-cancel").onclick = () => { S.rSlot = null; $("#resv-form").hidden = true; renderResv(); };
+$("#r-save").onclick = () => {
+  if (!S.store || !S.rSlot) return;
+  const name = clean($("#r-name").value); if (!name){ toast("お名前を入れてください"); return; }
+  const cap = Math.max(1, +S.cfg.slotCap || 3);
+  const n = dayResv().filter(r => r.slot === S.rSlot && r.status !== "cancel").length;
+  if (n >= cap && !$("#r-save").dataset.force){ $("#r-save").dataset.force = "1"; $("#r-save").textContent = "満員です。それでも入れる"; return; }
+  delete $("#r-save").dataset.force; $("#r-save").textContent = "予約する";
+  S.store.push("resv", {slot:S.rSlot, name, size:Math.max(1, parseInt($("#r-size").value) || 1), game:S.rGame, memo:String($("#r-memo").value || "").trim().slice(0, 40), status:"booked", ts:now(), fday:S.fday, by:S.staff}).done.catch(failed);
+  toast(`${S.rSlot} に ${name}さんの予約を入れました`);
+  $("#r-name").value = ""; $("#r-size").value = "1"; $("#r-memo").value = ""; S.rSlot = null; $("#resv-form").hidden = true;
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-r]"); if (!b) return;
+  const x = S.resv.find(r => r.id === b.dataset.r); if (!x) return;
+  S.store.update("resv/" + x.id, {status:b.dataset.st}).catch(failed);
+  if (b.dataset.st === "came") toast(`${x.name}さんが来場しました`, {label:"記録を入れる", fn: () => prefillName(x.name, x.game)});
+});
+
+/* ---------- 連絡 ---------- */
+chipSel($("#nt-tag"), Object.entries(TAGS).map(([k, [n]]) => [k, n]), S.ntTag, v => { S.ntTag = v; });
+$("#nt-open").checked = lsGet("nt-open") === "1";
+$("#nt-open").onchange = () => { lsSet("nt-open", $("#nt-open").checked ? "1" : "0"); renderNotes(); };
+function renderNotes(){
+  const el = $("#notes"), openOnly = $("#nt-open").checked;
+  const urgent = S.notes.filter(n => !n.done && n.tag === "urgent").length;
+  $("#urgent-badge").hidden = !urgent; $("#urgent-badge").textContent = urgent;
+  $("#nt-who").textContent = S.staff ? `投稿者：${S.staff}` : "名前は「設定」で入れられます";
+  const list = S.notes.filter(n => !openOnly || !n.done);
+  if (!S.loaded.notes){ el.innerHTML = `<div class="empty">読み込んでいます…</div>`; return; }
+  if (!list.length){ el.innerHTML = `<div class="empty">${openOnly ? "未対応の連絡はありません" : "まだ連絡はありません。「カードが足りない」「交代お願い」などをここに書くと、係全員に届きます。"}</div>`; return; }
+  el.innerHTML = list.map(n => {
+    const [tn, tc] = TAGS[n.tag] || TAGS.info;
+    return `<div class="note ${n.done ? "done" : ""}"><div class="nhead"><span class="pill ${n.done ? "ok" : tc}">${n.done ? "対応済み" : tn}</span><span class="meta">${esc(n.by || "係のだれか")}・${DAYNAME[n.fday] || ""} ${hm(n.ts)}</span>
+      <span class="acts push"><button class="btn sm" data-done="${esc(n.id)}">${n.done ? "未対応に戻す" : "対応した"}</button><button class="btn sm danger" data-del="notes/${esc(n.id)}">削除</button></span></div>
+      <div class="ntext">${esc(n.text)}</div></div>`;
+  }).join("");
+}
+$("#nt-post").onclick = () => {
+  const text = $("#nt-text").value.trim().slice(0, 300);
+  if (!text){ toast("内容を書いてください"); return; }
+  if (!S.store){ toast("まだ準備中です"); return; }
+  S.store.push("notes", {text, tag:S.ntTag, done:false, ts:now(), fday:S.fday, by:S.staff}).done.catch(failed);
+  $("#nt-text").value = ""; toast("投稿しました");
+};
+document.addEventListener("click", e => {
+  const d = e.target.closest("[data-done]"); if (!d) return;
+  const n = S.notes.find(n => n.id === d.dataset.done); if (n) S.store.update("notes/" + n.id, {done:!n.done}).catch(failed);
+});
+
+/* ---------- 設定 ---------- */
+S.staff = lsGet("staff") || "";
+$("#staff").value = S.staff;
+$("#staff").oninput = () => { S.staff = $("#staff").value.trim().slice(0, 16); lsSet("staff", S.staff); renderNotes(); };
+function fillCfg(){
+  $("#cf-day1").value = S.cfg.day1 || ""; $("#cf-day2").value = S.cfg.day2 || "";
+  $("#cf-start").value = S.cfg.slotStart; $("#cf-end").value = S.cfg.slotEnd;
+  $("#cf-min").value = S.cfg.slotMin; $("#cf-cap").value = S.cfg.slotCap; $("#cf-per").value = S.cfg.perGroup;
+}
+$("#cf-save").onclick = () => {
+  const c = {day1:$("#cf-day1").value, day2:$("#cf-day2").value, slotStart:$("#cf-start").value || "10:00", slotEnd:$("#cf-end").value || "15:00",
+    slotMin:Math.min(120, Math.max(5, parseInt($("#cf-min").value) || 15)), slotCap:Math.min(50, Math.max(1, parseInt($("#cf-cap").value) || 3)), perGroup:Math.min(60, Math.max(1, parseInt($("#cf-per").value) || 5))};
+  if (mins(c.slotEnd) <= mins(c.slotStart)){ toast("予約の受付終了は、開始より後にしてください"); return; }
+  S.store.set("config", c).then(() => toast("設定を保存しました"), failed);
+};
+let qrDone = "";
+function renderShare(){
+  const url = location.href.split("#")[0];
+  $("#site-url").textContent = url;
+  if (qrDone !== url && window.QRCode){
+    $("#qr").innerHTML = "";
+    try { new QRCode($("#qr"), {text:url, width:320, height:320, correctLevel:QRCode.CorrectLevel.M}); qrDone = url; } catch(e){ $("#qr").hidden = true; }
+  }
+}
+$("#copy-url").onclick = async () => {
+  const url = $("#site-url").textContent;
+  try { await navigator.clipboard.writeText(url); toast("リンクをコピーしました"); }
+  catch(e){ const r = document.createRange(); r.selectNodeContents($("#site-url")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("リンクを選択しました。コピーしてください"); }
+};
+$("#local-clear").onclick = () => {
+  const b = $("#local-clear");
+  if (!b.dataset.armed){ b.dataset.armed = "1"; b.textContent = "本当に全部消す？（元に戻せません）"; return; }
+  S.store.clear(); delete b.dataset.armed; b.textContent = "お試しデータを全部消す"; toast("お試しデータを消しました");
+};
+
+/* ---------- 全体 ---------- */
+function renderAll(){ renderRecent(); renderRanking(); renderStats(); renderNotes(); renderQueue(); renderResv(); renderCallScreen(); }
+setInterval(() => { if (!document.hidden){ renderQueue(); renderCallScreen(); } }, 30000);
+
+function boot(){
+  const stored = +lsGet("fday");
+  S.fday = stored === 2 ? 2 : 1; S.period = S.fday;
+  pressGroup($("#day-pick"), "d", S.fday);
+  drawPeriods(); drawGroups(); fillCfg(); route(); renderAll();
+  const cloud = !!DATABASE_URL.trim();
+  if (cloud && !window.firebase){
+    $("#conn").dataset.s = "err"; $("#conn-t").textContent = "接続できません";
+    banner("データの保存先（Firebase）を読み込めませんでした。電波の良い場所でページを開き直してください。"); return;
+  }
+  try { S.store = cloud ? firebaseStore() : localStore(); }
+  catch(e){ $("#conn").dataset.s = "err"; $("#conn-t").textContent = "設定エラー"; banner("データの保存先のURLが正しくないようです。index.html の DATABASE_URL を確かめてください。"); return; }
+  if (cloud){
+    $("#mode-info").textContent = "みんなで共有中：記録は Firebase に保存され、リンクを開いた全員の画面に数秒で反映されます。電波が切れても、つながったときに自動で送られます。";
+    S.store.onConn(ok => { $("#conn").dataset.s = ok ? "live" : "err"; $("#conn-t").textContent = ok ? "みんなと共有中" : "オフライン（あとで送信）"; });
+  } else {
+    $("#conn").dataset.s = "local"; $("#conn-t").textContent = "お試しモード";
+    $("#mode-info").textContent = "お試しモード：記録はこの端末（このブラウザ）の中だけに保存されます。みんなで共有するには、手順書どおりに Firebase の URL を index.html に書き込んでください。";
+    $("#local-tools").hidden = false;
+    banner("<b>お試しモード</b>：いまは記録がこの端末の中だけに保存されます。みんなで共有するには、手順書の「Firebaseの準備」をしてください。");
+  }
+  const onErr = () => { $("#conn").dataset.s = "err"; $("#conn-t").textContent = "読み込みエラー"; banner("データを読み込めませんでした。Firebase の「ルール」が手順書どおりか確かめてください。"); };
+  const byTsDesc = (a, b) => (b.ts || 0) - (a.ts || 0);
+  S.store.on("records", v => { S.records = toList(v).filter(r => GAMES[r.game]).sort(byTsDesc); S.loaded.records = true; renderRecent(); renderRanking(); renderStats(); }, onErr);
+  S.store.on("notes", v => { S.notes = toList(v).sort(byTsDesc); S.loaded.notes = true; renderNotes(); }, onErr);
+  S.store.on("queue", v => { S.queue = toList(v); S.loaded.queue = true; renderQueue(); renderCallScreen(); renderStats(); }, onErr);
+  S.store.on("resv", v => { S.resv = toList(v); S.loaded.resv = true; renderResv(); renderStats(); }, onErr);
+  S.store.on("config", v => { S.cfg = {...DEF_CFG, ...(v || {})}; fillCfg(); autoDay(); renderResv(); renderQueue(); }, onErr);
+}
+boot();
+})();
+</script>
+</body>
+</html>
